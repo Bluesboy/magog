@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import http.client
 import os
 import json
 import urllib.request
