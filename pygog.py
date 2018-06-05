@@ -8,13 +8,15 @@ import urllib.request
 # argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--cloneaddr", type = str, help = "source repo url", required = True)
-parser.add_argument("--reponame", type = str, help = "repository name", required = True)
+# parser.add_argument("--reponame", type = str, help = "repository name", required = True)
 parser.add_argument("-m", "--mirror", action="store_true", help = "Repository will be a mirror. Default is false")
 parser.add_argument("-p", "--private", action="store_true", help = "Repository will be private. Default is false")
 parser.add_argument("--description", type = str, help = "Repository description")
 parser.add_argument("--fqdn", type = str, help = "FQDN of target repos server")
 parser.add_argument("-o", "--owner", type = str, help = "Target repo owner", required = True)
 args = parser.parse_args()
+
+reponame = args.cloneaddr.split('/')[-1].split('.')[0]
 
 token = os.environ['GOGSTOKEN']
 user = os.environ['SOURCEUSER']
@@ -39,5 +41,5 @@ def migrate(req_headers, repo_name, clone_addr, user_name, user_passwd, uid, des
         return json.loads(f.read().decode("utf-8"))
 
 uid = get_owner_id(args.owner, headers, args.fqdn)
-result = migrate(headers, args.reponame, args.cloneaddr, user, passwd, uid, args.description, args.private, args.fqdn)
+result = migrate(headers, reponame, args.cloneaddr, user, passwd, uid, args.description, args.private, args.fqdn)
 print(json.dumps(result, indent = 4, ensure_ascii=False))
